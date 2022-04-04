@@ -105,3 +105,48 @@ Content-Type: application/json
 
 (see source code)
 
+## Setup prisma seed
+
+1. Add seec script to `package.json`:
+
+```js
+"prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+```
+
+1. Generate mocked data, e.g. with https://www.mockaroo.com/ and add to `prisma/seed.ts`:
+
+```ts
+import { PrismaClient, Prisma } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+
+const userData: Prisma.AuthorCreateInput[] = [
+  // add mock data
+];
+
+async function main() {
+  console.log(`Start seeding ...`)
+  for (const u of userData) {
+    const user = await prisma.author.create({
+      data: u,
+    })
+    console.log(`Created user with id: ${user.id}`)
+  }
+  console.log(`Seeding finished.`)
+}
+
+main()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+```
+
+1. Run `npx prisma db seed`
+
