@@ -1,0 +1,11 @@
+### 1. Get Authors
+GET http://localhost:3000/author
+
+### 2. Create author (2x time)
+POST http://localhost:3000/author
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@doe.com"
+}
