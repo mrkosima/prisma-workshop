@@ -169,3 +169,22 @@ app.use('/graphql', graphqlMiddleware(prisma));
 ```
 
 1. Open http://localhost:3000/graphql, test queries and mutations
+
+## Setup ERD generator
+
+1. Install dependencies:
+
+```
+npm install prisma-erd-generator @mermaid-js/mermaid-cli --save-dev
+```
+
+1. Add `erd` generator to `schema.prisma`:
+
+```schema
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../erd.png"
+}
+```
+
+1. Run `npx prisma generate` and open `erd.png`

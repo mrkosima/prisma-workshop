@@ -27,3 +27,8 @@ model Post {
   author    Author?  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int?
 }
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../erd.png"
+}
