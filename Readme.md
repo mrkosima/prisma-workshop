@@ -23,7 +23,7 @@
 
 1. Init prisma project
 
-`npx prisma init`
+```npx prisma init```
 
 1. Change datasource to
 
@@ -87,7 +87,7 @@ app.listen(3000)
 
 1. Install `REST Client` extension for VSCode and create `test.http` with the content:
 
-```
+```http
 ### 1. Get Authors
 GET http://localhost:3000/author
 
@@ -103,16 +103,16 @@ Content-Type: application/json
 
 ## Add all necessary REST endpoints
 
-(see source code)
+`(see source code)`
 
 ## Setup prisma seed
 
 1. Add seec script to `package.json`:
 
-```js
+```json
 "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  }
+  "seed": "ts-node prisma/seed.ts"
+}
 ```
 
 1. Generate mocked data, e.g. with https://www.mockaroo.com/ and add to `prisma/seed.ts`:
@@ -121,8 +121,6 @@ Content-Type: application/json
 import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
-
-
 const userData: Prisma.AuthorCreateInput[] = [
   // add mock data
 ];
@@ -150,3 +148,24 @@ main()
 
 1. Run `npx prisma db seed`
 
+## Setup GraphQL endpoint
+
+1. Install dependencies:
+
+```
+npm install @graphql-tools/schema express-graphql graphql-scalars --save
+```
+
+1. Crate GraphQL middleware with all necessary resolves
+
+`(see source code)`
+
+1. Add graphql middleware in `src/index.ts`:
+
+```ts
+import { graphqlMiddleware } from "./graphql";
+
+app.use('/graphql', graphqlMiddleware(prisma));
+```
+
+1. Open http://localhost:3000/graphql, test queries and mutations
