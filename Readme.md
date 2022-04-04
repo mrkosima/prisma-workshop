@@ -1,12 +1,14 @@
-# Prisma - REST + GraphQL
+# Prisma: REST + GraphQL
 
 ## Init Prisma project
 
 1. Install dependencies:
 
-`npm install prisma typescript ts-node @types/node --save-dev`
+```
+npm install prisma typescript ts-node @types/node --save-dev
+```
 
-1. Create tsconfig.json
+2. Create tsconfig.json
 
 ```ts
 {
@@ -21,11 +23,13 @@
 }
 ```
 
-1. Init prisma project
+3. Init prisma project
 
-```npx prisma init```
+```
+npx prisma init
+```
 
-1. Change datasource to
+4. Change datasource to
 
 ```schema
 datasource db {
@@ -34,13 +38,55 @@ datasource db {
 }
 ```
 
-1. Add models (e.g. Author, Post) to `schema.prisma` file
+5. Add models (e.g. Author) to `schema.prisma` file:
 
-1. Run initial migration
+```
+model Author {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+```
 
-`npx prisma migrate dev --name init`
+6. Run initial migration
 
-1. Run Prisma Studio - `npx prisma studio`, http://localhost:5555
+```
+npx prisma migrate dev --name init
+```
+
+7. Run Prisma Studio
+
+```
+npx prisma studio
+```
+
+8. Open http://localhost:5555
+
+9. Add other models (e.g. Post) to `schema.prisma` and run next migrations
+
+```
+model Author {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  posts Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String?
+  viewCount Int      @default(0)
+  author    Author?  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int?
+}
+```
+
+```
+npx prisma migrate dev --name "add posts"
+```
 
 ## Setup express app and PrismaClient
 
@@ -51,7 +97,7 @@ npm install express --save
 npm install @types/express nodemon --save-dev
 ```
 
-1. Create express app and init Prisma client in `src/index.ts`:
+2. Create express app and init Prisma client in `src/index.ts`:
 
 ```ts
 import { PrismaClient } from '@prisma/client';
@@ -87,7 +133,7 @@ app.listen(3000)
 
 1. Install `REST Client` extension for VSCode and create `test.http` with the content:
 
-```http
+```
 ### 1. Get Authors
 GET http://localhost:3000/author
 
@@ -107,7 +153,7 @@ Content-Type: application/json
 
 ## Setup prisma seed
 
-1. Add seec script to `package.json`:
+3. Add seec script to `package.json`:
 
 ```json
 "prisma": {
@@ -115,7 +161,7 @@ Content-Type: application/json
 }
 ```
 
-1. Generate mocked data, e.g. with https://www.mockaroo.com/ and add to `prisma/seed.ts`:
+4. Generate mocked data, e.g. with https://www.mockaroo.com/ and add to `prisma/seed.ts`:
 
 ```ts
 import { PrismaClient, Prisma } from '@prisma/client'
@@ -146,7 +192,7 @@ main()
   })
 ```
 
-1. Run `npx prisma db seed`
+5. Run `npx prisma db seed`
 
 ## Setup GraphQL endpoint
 
@@ -156,11 +202,11 @@ main()
 npm install @graphql-tools/schema express-graphql graphql-scalars --save
 ```
 
-1. Crate GraphQL middleware with all necessary resolves
+2. Crate GraphQL middleware with all necessary resolves
 
 `(see source code)`
 
-1. Add graphql middleware in `src/index.ts`:
+3. Add graphql middleware in `src/index.ts`:
 
 ```ts
 import { graphqlMiddleware } from "./graphql";
@@ -168,7 +214,7 @@ import { graphqlMiddleware } from "./graphql";
 app.use('/graphql', graphqlMiddleware(prisma));
 ```
 
-1. Open http://localhost:3000/graphql, test queries and mutations
+4. Open http://localhost:3000/graphql, test queries and mutations
 
 ## Setup ERD generator
 
@@ -178,7 +224,7 @@ app.use('/graphql', graphqlMiddleware(prisma));
 npm install prisma-erd-generator @mermaid-js/mermaid-cli --save-dev
 ```
 
-1. Add `erd` generator to `schema.prisma`:
+2. Add `erd` generator to `schema.prisma`:
 
 ```schema
 generator erd {
@@ -187,4 +233,4 @@ generator erd {
 }
 ```
 
-1. Run `npx prisma generate` and open `erd.png`
+3. Run `npx prisma generate` and open `erd.png`
