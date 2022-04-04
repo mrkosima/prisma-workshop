@@ -1,30 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import express from 'express'
+import { authorRouter, feedRouter, postRouter } from './rest';
 
 const prisma = new PrismaClient();
 
 const app = express();
 app.use(express.json());
 
+app.get('/', async (_req, res) => {
+  res.json({ hello: 'world ' });
+})
 
-app.get('/author', async (req, res) => {
-  const authors = await prisma.author.findMany();
-  res.json({ authors });
-});
-
-app.post('/author', async (req, res) => {
-  try {
-    const { name, email } = req.body;
-    const author = await prisma.author.create({
-      data: {
-        name,
-        email
-      }
-    });
-    res.json({ author });
-  } catch (e) {
-    res.status(400).send(`Bad request, ${e}`);
-  }
-});
+app.use('/author', authorRouter(prisma));
+app.use('/post', postRouter(prisma));
+app.use('/feed', feedRouter(prisma));
 
 app.listen(3000)

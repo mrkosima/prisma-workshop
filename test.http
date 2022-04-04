@@ -9,3 +9,36 @@ Content-Type: application/json
   "name": "John Doe",
   "email": "john@doe.com"
 }
+
+### 3. Create post
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+  "title": "Design API with Prisma",
+  "authorEmail": "john@doe.com"
+}
+
+### 4. Create another post
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+  "title": "React server components: from zero to hero",
+  "authorEmail": "john@doe.com"
+}
+
+### 5. Get Authors
+GET http://localhost:3000/author
+
+### 6. Get post by id
+GET http://localhost:3000/post/1
+
+### 7. Update post views
+PUT http://localhost:3000/post/1/views
+
+### 8. Feed with search params
+GET http://localhost:3000/feed?searchString=Prisma&skip=0&take=0
+
+### 9. Delete author
+DELETE http://localhost:3000/author/1

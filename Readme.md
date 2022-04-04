@@ -101,3 +101,7 @@ Content-Type: application/json
 }
 ```
 
+## Add all necessary REST endpoints
+
+(see source code)
+
